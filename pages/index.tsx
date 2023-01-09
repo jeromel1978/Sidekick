@@ -38,6 +38,7 @@ export default function Home() {
   };
   const Send = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!!e) e.preventDefault();
+    if (!Prompt) return;
     setMessages([...Messages, { IsBot: false, ID: UniqueID(), Text: Prompt }]);
     const Input = document.querySelector("#InputText") as HTMLTextAreaElement;
     Input.value = "";
