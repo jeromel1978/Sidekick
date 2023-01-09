@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import PersonIcon from "@mui/icons-material/Person";
+
 type ComponentProps = {
   IsBot: boolean;
   ID: string;
@@ -40,6 +42,8 @@ export default function Home({ IsBot, ID, Text }: ComponentProps) {
         setOut(ResObj.bot);
       } else {
         console.log(res);
+        const ResObj = await res.json();
+        console.log(ResObj);
       }
     });
     LoadInterval = setInterval(() => {
@@ -56,15 +60,19 @@ export default function Home({ IsBot, ID, Text }: ComponentProps) {
     <>
       <div className={FormatReq}>
         <div>
-          <Image src={IconReq} alt="Icon" width={24} height={24} />
+          <Image src={IconReq} alt="Icon" width={24} height={24} className="w-8 min-w-[2rem]" />
         </div>
-        <div className="MessageText bg-slate-500 whitespace-pre-wrap m-2 px-2 py-1 rounded-md">{Text}</div>
+        <div className="MessageText bg-slate-500 bg-opacity-20 whitespace-pre-wrap m-2 px-2 py-1 rounded-md min-h-[2rem]">
+          {Text}
+        </div>
       </div>
       <div className={FormatRes}>
         <div>
-          <Image src={IconRes} alt="Icon" width={24} height={24} />
+          <Image src={IconRes} alt="Icon" width={24} height={24} className="w-8 min-w-[2rem]" />
         </div>
-        <div className="MessageText bg-slate-500 whitespace-pre-wrap m-2 px-2 py-1 rounded-md">{Out}</div>
+        <div className="MessageText bg-slate-500 bg-opacity-25 whitespace-pre-wrap m-2 px-2 py-1 rounded-md min-w-[2rem] min-h-[2rem]">
+          {Out}
+        </div>
       </div>
     </>
   );
