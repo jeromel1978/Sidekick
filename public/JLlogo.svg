@@ -1,0 +1,28 @@
+<svg 
+   viewBox="0 0 102 102" preserveAspectRatio="xMinYMin meet"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   width="102" height="102">
+	<path 
+		fill = "#FF0000"
+		stroke = "#AA0000"
+		stroke-width = "1"
+		d="
+			M 1 51
+			L 25 51
+			L 49 1
+			L 49 101
+			Z
+	"></path>
+	<path 
+		fill = "#FF0000"
+		stroke = "#AA0000"
+		stroke-width = "1"
+		d="
+			M 101 51
+			L 77 51
+			L 53 1
+			L 53 101
+			Z
+	"></path>
+</svg>
