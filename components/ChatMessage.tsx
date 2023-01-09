@@ -41,9 +41,11 @@ export default function Home({ IsBot, ID, Text }: ComponentProps) {
         //   console.log(ResObj.bot);
         setOut(ResObj.bot);
       } else {
-        console.log(res);
+        // console.log(res);
         const ResObj = await res.json();
-        console.log(ResObj);
+        // console.log(ResObj);
+        clearInterval(LoadInterval);
+        setOut(ResObj.error.message);
       }
     });
     LoadInterval = setInterval(() => {
