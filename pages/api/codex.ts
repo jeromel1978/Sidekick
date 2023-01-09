@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 // import type { Configuration} from 'openai'
 
 type Data = {
+  ok: boolean;
   bot?: string;
   error?: any;
 };
@@ -29,10 +30,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       presence_penalty: 0,
     };
     const Response = await OpenAI.createCompletion(OpenAIParameters);
-    res.status(200).send({ bot: Response.data.choices[0].text as string });
+    res.status(200).send({ ok: true, bot: Response.data.choices[0].text as string });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ error: err });
+    res.status(500).send({ ok: false, error: err });
   }
 };
 

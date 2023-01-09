@@ -38,8 +38,9 @@ export default function Home({ IsBot, ID, Text }: ComponentProps) {
         // console.log(ResObj);
         //   console.log(ResObj.bot);
         setOut(ResObj.bot);
+      } else {
+        console.log(res);
       }
-      //   console.log(res);
     });
     LoadInterval = setInterval(() => {
       setOut(Loading());
