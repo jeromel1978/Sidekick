@@ -31,9 +31,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     };
     const Response = await OpenAI.createCompletion(OpenAIParameters);
     res.status(200).send({ ok: true, bot: Response.data.choices[0].text as string });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ ok: false, error: err });
+  } catch (err: any) {
+    // console.error(err);
+    res.status(err.response.status).send({ ok: false, error: err.response.statusText });
+    // res.status(500).send({ ok: false, error: err });
   }
 };
 

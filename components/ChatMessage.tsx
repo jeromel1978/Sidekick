@@ -54,8 +54,8 @@ export default function Home({ IsBot, ID, Text }: ComponentProps) {
   };
   if (!Out && Initial) Loader();
   //   const Format = `message flex flex-row${!!IsBot ? "" : "-reverse"}`;
-  const FormatReq = `message flex flex-row`;
-  const FormatRes = `message flex flex-row-reverse`;
+  const FormatReq = `message flex flex-row-reverse`;
+  const FormatRes = `message flex flex-row`;
   const IconReq = `/person_black_24dp.svg`;
   const IconRes = `/JLlogo.svg`;
   return (
