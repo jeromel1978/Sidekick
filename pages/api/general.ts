@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     const Prompt = req.body.prompt;
     const OpenAIParameters = {
-      model: "code-davinci-002",
+      model: "text-davinci-003",
       prompt: Prompt,
       temperature: 0,
       max_tokens: 3000,
