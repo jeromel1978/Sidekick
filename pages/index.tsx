@@ -5,13 +5,16 @@ import styles from "../styles/Home.module.css";
 import React, { useState } from "react";
 import ChatMessage from "../components/ChatMessage";
 import Logo from "../public/JLlogo.svg";
-import {
-  Send as SendIcon,
-  Expand as ExpandIcon,
-  UnfoldMore as UnfoldMoreIcon,
-  UnfoldLess as UnfoldLessIcon,
-} from "@mui/icons-material";
-import { Select, MenuItem } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import CssBaseline from "@mui/material/CssBaseline";
+import { Send as SendIcon, UnfoldMore as UnfoldMoreIcon, UnfoldLess as UnfoldLessIcon } from "@mui/icons-material";
+import { Select, MenuItem, TextField, IconButton } from "@mui/material";
+// const darkTheme = createTheme({
+//   palette: {
+//     mode: "dark",
+//   },
+// });
 
 const Options = [
   { link: "general", name: "General" },
@@ -32,8 +35,18 @@ export default function Home() {
   const [Prompt, setPrompt] = useState("");
   const [Expanded, setExpanded] = useState(false);
   const [Model, setModel] = useState(Options[0].link);
-  // const Form = document.querySelector("form");
-  // const MessageContainer = document.querySelector(".messages");
+
+  const PrefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const Theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: PrefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [PrefersDarkMode]
+  );
+
   let LoadInterval;
   let IntervalCount: number = 0;
   const Loading = () => {
@@ -60,7 +73,6 @@ export default function Home() {
     }, 100);
     Input.value = "";
     Input.focus();
-    // Loader(document.querySelector(".messages")?.lastElementChild as HTMLElement);
   };
   const CheckKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.code === "Enter" && !e.shiftKey) Send(undefined as any);
@@ -98,53 +110,49 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/JLlogo.svg" />
       </Head>
-      <main className="h-screen w-screen grid grid-rows-[auto_1fr_auto]">
-        <nav>
-          <Select
-            id="SelectModel"
-            value={Model ?? Options[0].link}
-            onChange={ChangeModel}
-            className="dark:bg-slate-800 dark:text-white"
-          >
-            {Options.map((opt, i) => (
-              <MenuItem value={opt.link} key={i}>
-                {opt.name}
-              </MenuItem>
+      <ThemeProvider theme={Theme}>
+        <CssBaseline />
+        <main className="h-full w-full grid grid-rows-[auto_1fr_auto]">
+          <nav>
+            <Select id="SelectModel" value={Model ?? Options[0].link} onChange={ChangeModel}>
+              {Options.map((opt, i) => (
+                <MenuItem value={opt.link} key={i}>
+                  {opt.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </nav>
+          <div id="Messages" className="messages w-fill flex flex-col grow max-w-full overflow-y-auto">
+            {Messages.map((Message: Message) => (
+              <ChatMessage
+                IsBot={Message.IsBot}
+                key={Message.ID}
+                ID={Message.ID}
+                Text={Message.Text}
+                Model={Model}
+                onReplied={ResultScrollDown}
+              />
             ))}
-          </Select>
-        </nav>
-        <div id="Messages" className="messages w-fill flex flex-col grow max-w-full overflow-y-auto">
-          {Messages.map((Message: Message) => (
-            <ChatMessage
-              IsBot={Message.IsBot}
-              key={Message.ID}
-              ID={Message.ID}
-              Text={Message.Text}
-              Model={Model}
-              onReplied={ResultScrollDown}
-            />
-          ))}
-        </div>
-        <form className="w-fill flex grow-0 max-w-full gap-1">
-          <button onClick={Expand} className="flex grow-0" title="Expand">
-            {ExpandIcon()}
-          </button>
-          <textarea
-            rows={ExpandRows()}
-            cols={1}
-            placeholder="Type a Message..."
-            id="InputText"
-            className="flex grow"
-            onKeyUp={CheckKey}
-            onChange={(e) => {
-              setPrompt(e.target.value);
-            }}
-          ></textarea>
-          <button type="submit" onClick={Send} className="flex grow-0" title="Send">
-            <SendIcon></SendIcon>
-          </button>
-        </form>
-      </main>
+          </div>
+          <form className="w-fill flex grow-0 max-w-full gap-1">
+            <TextField
+              id="InputText"
+              color="primary"
+              className="flex grow text-current"
+              onChange={(e) => {
+                setPrompt(e.target.value);
+              }}
+              label="Message"
+              variant="outlined"
+              multiline
+              maxRows={5}
+            ></TextField>
+            <IconButton onClick={Expand} className="flex grow-0 " title="Send">
+              <SendIcon />
+            </IconButton>
+          </form>
+        </main>
+      </ThemeProvider>
     </>
   );
 }
