@@ -147,7 +147,7 @@ export default function Home() {
               multiline
               maxRows={5}
             ></TextField>
-            <IconButton onClick={Expand} className="flex grow-0 " title="Send">
+            <IconButton onClick={Send} className="flex grow-0 " title="Send">
               <SendIcon />
             </IconButton>
           </form>
