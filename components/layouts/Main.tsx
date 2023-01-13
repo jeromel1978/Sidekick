@@ -20,11 +20,12 @@ type Message = {
 };
 type LayoutProps = {
   children?: React.ReactNode;
+  Model: string;
 };
 const inter = Inter({ subsets: ["latin"] });
 const Messages: Message[] = [];
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children, Model }: LayoutProps) => {
   // const [Model, setModel] = useState(Options[0].link);
 
   const PrefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -57,7 +58,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <CssBaseline />
         <main className="h-full w-full grid grid-rows-[auto_1fr_auto]">
           <nav>
-            <Select id="SelectModel" value={Options[0].link} onChange={ChangeModel}>
+            <Select id="SelectModel" value={Model ?? Options[0].link} onChange={ChangeModel}>
               {Options.map((opt, i) => (
                 <MenuItem value={opt.link} key={i}>
                   {opt.name}

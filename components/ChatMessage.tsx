@@ -63,6 +63,8 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
   const FormatOutput = (Out: string) => {
     if (Model === "image" && Out.substring(0, 1) !== "." && !!Out)
       return <Image src={`data:image/png;base64, ${Out}`} alt="Result" width={0} height={0} className="w-fit"></Image>;
+    // if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) Out = JSON.stringify(JSON.parse(Out));
+    if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) console.log(Out);
     return Out;
   };
   return (

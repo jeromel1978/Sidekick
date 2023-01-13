@@ -37,6 +37,12 @@ const Schema = `
 			"Marital": string,
 			"Anniversary":date,
 			"Addresses":[
+        "Line1": string,
+        "Line2": string,
+        "City": string,
+        "Province": string,
+        "Country": string,
+        "PostalCode": string
 			],
 			"PhoneNumber":[
 				"Type": string,
@@ -48,7 +54,7 @@ const Schema = `
 				"Address": string
 			],
 			"Occupation": string,
-			"QuickNote": string,
+			"Note": string,
 			"PersonalID":[
 				{
 					"Type":string,
@@ -72,7 +78,7 @@ const Schema = `
 `;
 
 const FullPrompt = (Data: string) => `
-Populate the following schema
+Populate the following exact schema in valid JSON syntax, remove comments from the results
 
 """
 ${Schema}
@@ -87,18 +93,25 @@ ${Data}
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     const Prompt = req.body.prompt;
-    const OpenAIParameters = {
+    let OpenAIParameters = {
       model: "text-davinci-003",
       prompt: FullPrompt(Prompt),
       temperature: 0,
       max_tokens: 3000,
       top_p: 1,
-      frequency_penalty: 0.5,
+      frequency_penalty: 0,
       presence_penalty: 0,
       user: "jerome",
     };
-    const Response = await OpenAI.createCompletion(OpenAIParameters);
-    res.status(200).send({ ok: true, bot: Response.data.choices[0].text as string });
+    const ResInitial = await OpenAI.createCompletion(OpenAIParameters);
+    OpenAIParameters.prompt = `
+    remove all comments from the following JSON schema
+    """
+    ${ResInitial.data.choices[0].text}
+    """
+    `;
+    const ResFinal = await OpenAI.createCompletion(OpenAIParameters);
+    res.status(200).send({ ok: true, bot: ResFinal.data.choices[0].text as string });
   } catch (err: any) {
     res.status(err.response.status).send({ ok: false, error: err.response.statusText });
   }
