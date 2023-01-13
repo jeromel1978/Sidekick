@@ -104,14 +104,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       user: "jerome",
     };
     const ResInitial = await OpenAI.createCompletion(OpenAIParameters);
-    OpenAIParameters.prompt = `
-    Remove all comments from the following JSON schema
-    """
-    ${ResInitial.data.choices[0].text}
-    """
-    `;
-    const ResFinal = await OpenAI.createCompletion(OpenAIParameters);
-    res.status(200).send({ ok: true, bot: ResFinal.data.choices[0].text as string });
+    // OpenAIParameters.prompt = `
+    // Remove all comments from the following JSON schema
+    // """
+    // ${ResInitial.data.choices[0].text}
+    // """
+    // `;
+    // const ResFinal = await OpenAI.createCompletion(OpenAIParameters);
+    res.status(200).send({ ok: true, bot: ResInitial.data.choices[0].text as string });
   } catch (err: any) {
     res.status(err.response.status).send({ ok: false, error: err.response.statusText });
   }
