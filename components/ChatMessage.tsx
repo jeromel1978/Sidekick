@@ -46,6 +46,8 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
         const ResObj = await res.json();
         clearInterval(LoadInterval);
         setOut("");
+        console.log("Server Error", ResObj);
+        // console.error(ResObj)
         setError(ResObj.bot);
       }
       onReplied();

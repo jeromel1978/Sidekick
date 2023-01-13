@@ -105,7 +105,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     };
     const ResInitial = await OpenAI.createCompletion(OpenAIParameters);
     OpenAIParameters.prompt = `
-    remove all comments from the following JSON schema
+    Remove all comments from the following JSON schema
     """
     ${ResInitial.data.choices[0].text}
     """
