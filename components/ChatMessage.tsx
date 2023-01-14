@@ -46,6 +46,7 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
         const ResObj = await res.json();
         clearInterval(LoadInterval);
         setOut("");
+        setOut(ResObj.error);
         console.log("Server Error", ResObj);
         // console.error(ResObj)
         setError(ResObj.bot);
@@ -66,7 +67,7 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
     if (Model === "image" && Out.substring(0, 1) !== "." && !!Out)
       return <Image src={`data:image/png;base64, ${Out}`} alt="Result" width={0} height={0} className="w-fit"></Image>;
     // if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) Out = JSON.stringify(JSON.parse(Out));
-    if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) console.log(Out);
+    // if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) console.log(Out);
     return Out;
   };
   return (
