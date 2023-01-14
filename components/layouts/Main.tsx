@@ -9,6 +9,7 @@ import { Select, MenuItem, TextField, IconButton } from "@mui/material";
 const Options = [
   { link: "general", name: "General" },
   { link: "interviewer", name: "Interviewer" },
+  { link: "convertschema", name: "Schema Converter" },
   { link: "codex", name: "Coding" },
   { link: "image", name: "Image" },
 ];

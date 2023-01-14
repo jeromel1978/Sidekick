@@ -6,10 +6,11 @@ type ComponentProps = {
   IsBot: boolean;
   ID: string;
   Text: string;
+  Prompt?: string;
   Model: string;
   onReplied: Function;
 };
-export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentProps) {
+export default function Home({ IsBot, ID, Text, Prompt, Model, onReplied }: ComponentProps) {
   const [Initial, setInitial] = useState(true);
   const [Out, setOut] = useState("" as any);
   const [Error, setError] = useState("");
@@ -23,6 +24,7 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
   const Loader = () => {
     if (!Text) return;
     setInitial(false);
+    console.log(Model);
     fetch(`/api/${Model}`, {
       method: "post",
       mode: "cors", // no-cors, *cors, same-origin
@@ -32,7 +34,7 @@ export default function Home({ IsBot, ID, Text, Model, onReplied }: ComponentPro
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: Text,
+        prompt: Prompt ?? Text,
       }),
     }).then(async (res: Response) => {
       if (res.ok) {
