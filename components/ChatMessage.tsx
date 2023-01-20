@@ -14,6 +14,7 @@ export default function Home({ IsBot, ID, Text, Prompt, Model, onReplied }: Comp
   const [Initial, setInitial] = useState(true);
   const [Out, setOut] = useState("" as any);
   const [Error, setError] = useState("");
+
   let LoadInterval: string | number | NodeJS.Timer | undefined;
   let IntervalCount: number = 0;
   const Loading = () => {
@@ -22,9 +23,9 @@ export default function Home({ IsBot, ID, Text, Prompt, Model, onReplied }: Comp
   };
 
   const Loader = () => {
-    if (!Text) return;
+    if (!Text || !!Out) return;
     setInitial(false);
-    console.log(Model);
+    // console.log(Model);
     fetch(`/api/${Model}`, {
       method: "post",
       mode: "cors", // no-cors, *cors, same-origin
@@ -61,15 +62,55 @@ export default function Home({ IsBot, ID, Text, Prompt, Model, onReplied }: Comp
   };
   if (!Out && Initial) Loader();
   //   const Format = `message flex flex-row${!!IsBot ? "" : "-reverse"}`;
+  const RemoveBlanks = (Data: string) => {
+    return JSON.stringify(RemoveBlanksFromLevel(JSON.parse(Data)));
+  };
+  const RemoveBlanksFromLevel = (Data: any) => {
+    if (!Data) return Data;
+    Object.entries(Data).forEach(([key, value]) => {
+      const covered = ["string", "number", "object", "boolean"];
+      if (!covered.includes(typeof value)) console.log(`${key}: ${value} (${typeof value})`);
+      if (typeof value === "string" && (!value || value === "")) delete Data[key];
+      if (typeof value === "number" && !value) delete Data[key];
+      if (typeof value === "object") {
+        // console.log(key, value, RemoveBlanksFromLevel(value));
+        if (Array.isArray(value)) {
+          let O: any[] = [];
+          value.forEach((v, i) => {
+            const Record = RemoveBlanksFromLevel(v);
+            if (!!Record) O.push(Record);
+          });
+          if (typeof O[0] === "object") {
+            if (!O[0]) console.log(key, O[0]);
+            Data[key] = O;
+          }
+          // if (Object.entries(O).length === 0) console.log(key, O);
+          // else Data[key] = O;
+        } else {
+          Data[key] = RemoveBlanksFromLevel(value);
+          if (Object.entries(Data).length === 0) delete Data[key];
+          else {
+            if (!Data[key]) return;
+            if (!Data[key][0]) return;
+            if (Object.entries(Data[key][0]).length === 0) delete Data[key];
+          }
+          if (Array.isArray(Data[key])) console.log(key, "isArray", Data[key]);
+        }
+      }
+    });
+    return Data;
+  };
   const FormatReq = `message flex flex-row-reverse`;
   const FormatRes = `message flex flex-row ${Model === "image" ? `w-3/4 max-w-lg` : ``}`;
   const IconReq = `/person_black_24dp.svg`;
   const IconRes = `/JLlogo.svg`;
+  const FormatJSON = (value: string) => JSON.stringify(JSON.parse(value), null, 2);
   const FormatOutput = (Out: string) => {
     if (Model === "image" && Out.substring(0, 1) !== "." && !!Out)
       return <Image src={`data:image/png;base64, ${Out}`} alt="Result" width={0} height={0} className="w-fit"></Image>;
     // if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) Out = JSON.stringify(JSON.parse(Out));
     // if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) console.log(Out);
+    if (Model === "interviewer" && Out.substring(0, 1) !== "." && !!Out) Out = FormatJSON(RemoveBlanks(Out));
     return Out;
   };
   return (

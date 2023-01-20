@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ChatMessage from "../components/ChatMessage";
-import { Send as SendIcon } from "@mui/icons-material";
+
 import { TextField, IconButton } from "@mui/material";
 import Layout from "../components/layouts/Main";
+import { Send as SendIcon } from "@mui/icons-material";
 
 type Message = {
   IsBot: boolean;

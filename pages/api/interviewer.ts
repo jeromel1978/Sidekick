@@ -17,7 +17,7 @@ const OpenAIConf = new Configuration({
 const OpenAI = new OpenAIApi(OpenAIConf);
 const Schema = `
 {
-  "id": "new",
+  "UpdateType": "new" | "update",
   "Advisor1": string,
   "Advisor2": string,
   "Type": "client" | "prospect",
